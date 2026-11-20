@@ -1,0 +1,466 @@
+{
+  "info": {
+    "_postman_id": "45119385-99e6-4ddf-b6ce-60216ad9512b",
+    "name": "ms-cursos",
+    "description": "Pruebas de ms-cursos (Evaluación Módulo 3). Antes de correr: 1) ejecutar el caso 0 y pegar el token en la variable token_admin; 2) id_a_eliminar = id que devolvió el caso 7. Para volver a correr la colección completa, cambiar el codigo del caso 7 (SIS-301 ya existiría → 409).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token_admin}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "0. Login administrador (copiar token a token_admin)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{usuarios_url}}/usuarios/login",
+          "host": [
+            "{{usuarios_url}}"
+          ],
+          "path": [
+            "usuarios",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@empresa.com\",\n  \"password\": \"Admin2026*\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "1. Listar todos → 200",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/cursos",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Filtrar por semestre → 200",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/cursos?semestre=2026-2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos"
+          ],
+          "query": [
+            {
+              "key": "semestre",
+              "value": "2026-2"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Consultar por lotes (?ids=) → 200",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/cursos?ids=1,3",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos"
+          ],
+          "query": [
+            {
+              "key": "ids",
+              "value": "1,3"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Obtener un curso existente → 200",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/cursos/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Obtener un id que no existe → 404",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/cursos/9999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos",
+            "9999"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6. Obtener con id no numérico → 400",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/cursos/abc",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos",
+            "abc"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "7. Crear con datos válidos → 201",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/cursos",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"SIS-301\",\n  \"nombre\": \"Sistemas Operativos\",\n  \"creditos\": 4,\n  \"cupo\": 20,\n  \"semestre\": \"2027-1\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "8. Crear sin un atributo obligatorio → 400",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/cursos",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"SIS-302\",\n  \"nombre\": \"Compiladores\",\n  \"creditos\": 3,\n  \"semestre\": \"2027-1\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "9. Crear con creditos fuera de rango (7) → 400",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/cursos",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"SIS-303\",\n  \"nombre\": \"Ética\",\n  \"creditos\": 7,\n  \"cupo\": 20,\n  \"semestre\": \"2027-3\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "10. Crear con codigo repetido (regla de negocio) → 409",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/cursos",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"RSM-101\",\n  \"nombre\": \"Curso duplicado\",\n  \"creditos\": 2,\n  \"cupo\": 10,\n  \"semestre\": \"2026-2\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "11. Actualizar un curso existente → 200",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/cursos/2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos",
+            "2"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"BDM-201\",\n  \"nombre\": \"Bases de Datos Multimedia\",\n  \"creditos\": 4,\n  \"cupo\": 40,\n  \"semestre\": \"2026-2\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "12. Actualizar con el codigo de otro curso → 409",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/cursos/2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos",
+            "2"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"RSM-101\",\n  \"nombre\": \"Bases de Datos Multimedia\",\n  \"creditos\": 4,\n  \"cupo\": 40,\n  \"semestre\": \"2026-2\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "13. Actualizar un id que no existe → 404",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/cursos/9999",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos",
+            "9999"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"codigo\": \"SIS-301\",\n  \"nombre\": \"Sistemas Operativos\",\n  \"creditos\": 4,\n  \"cupo\": 20,\n  \"semestre\": \"2027-1\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "14. Eliminar un curso existente → 204",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/cursos/{{id_a_eliminar}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos",
+            "{{id_a_eliminar}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "15. Eliminar el mismo curso otra vez → 404",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/cursos/{{id_a_eliminar}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos",
+            "{{id_a_eliminar}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "16. Listar sin token → 401",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/cursos",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos"
+          ]
+        },
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:3011"
+    },
+    {
+      "key": "usuarios_url",
+      "value": "http://127.0.0.1:3001"
+    },
+    {
+      "key": "token_admin",
+      "value": ""
+    },
+    {
+      "key": "id_a_eliminar",
+      "value": "4"
+    }
+  ]
+}
